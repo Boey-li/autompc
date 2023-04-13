@@ -21,14 +21,16 @@ jobs:
 
     - name: Run tests
       run: |
-        docker run --rm autompc coverage run -m unittest discover
+        docker run -t -d --name autompc-container autompc coverage run -m unittest discover
 
     - name: Generate coverage report
       run: |
-        docker run -t --rm -v "$(pwd)/coverage:/coverage" autompc coverage html -d /coverage/html
+        docker exec autompc-container coverage html -d /coverage/html
+        docker cp autompc-container:/coverage "$(pwd)/coverage"
+        docker rm -f autompc-container
 
     - name: Upload coverage report
-      uses: actions/upload-artifact@v2
-      with:
-        name: coverage-report
-        path: coverage/html
+       uses: actions/upload-artifact@v2
+       with:
+         name: coverage-report
+         path: coverage/html
