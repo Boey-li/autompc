@@ -5,6 +5,7 @@ WORKDIR /src
 
 # Install general dependencies
 RUN pip install -r requirements.txt
+RUN pip install coverage
 
 # Install ipopt
 RUN conda install ipopt cyipopt -c conda-forge 
