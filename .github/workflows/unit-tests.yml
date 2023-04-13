@@ -1,0 +1,24 @@
+name: Unit Tests
+
+on:
+  push:
+    branches: [ 0.2-dev-ci-test ]
+  pull_request:
+    branches: [ 0.2-dev-ci-test ]
+
+jobs:
+  test:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v2
+
+    - name: Build Docker image
+      run: |
+        docker build -t autompc .
+
+    - name: Run tests
+      run: |
+        docker run --rm autompc python -m unittest discover
